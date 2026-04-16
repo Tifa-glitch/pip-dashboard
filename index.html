@@ -240,18 +240,14 @@ const METRICS = [
   {key:'mdc',   label:'中判陳列優化 連鎖', unit:'家', hasTarget:true },
   {key:'bdt',   label:'大判陳列優化 傳統', unit:'家', hasTarget:true },
   {key:'bdc',   label:'大判陳列優化 連鎖', unit:'家', hasTarget:true },
-  {key:'mst',   label:'中判特賣 傳統',     unit:'家', hasTarget:false},
-  {key:'msc',   label:'中判特賣 連鎖',     unit:'家', hasTarget:false},
-  {key:'bst',   label:'大判特賣 傳統',     unit:'家', hasTarget:false},
-  {key:'bsc',   label:'大判特賣 連鎖',     unit:'家', hasTarget:false},
   {key:'order', label:'訂單數',             unit:'單', hasTarget:false},
   {key:'pay',   label:'收款金額',           unit:'元', hasTarget:false},
 ];
 
 const REGIONS = [
-  { label: '北區', names: ['張田裕','劉自強','楊承舜'] },
+  { label: '北區', names: ['張田裕','劉自強','楊承舜','顏廷樨'] },
   { label: '中區', names: ['陳峰毓','林恩霆','李靜宜'] },
-  { label: '南區', names: ['顏廷樨','范振軒','黃敬凱'] },
+  { label: '南區', names: ['范振軒','黃敬凱'] },
 ];
 const NAMES = REGIONS.flatMap(r => r.names);
 const REGION_COLORS = { '北區':'#2e7d32', '中區':'#388e3c', '南區':'#1b5e20' };

@@ -191,7 +191,9 @@ async function loadData() {
 
 // ── 計算 ──
 function getLatest(name, key) {
-  const rows = RAW.filter(r => r.name === name).sort((a,b) => b.date.localeCompare(a.date));
+  // 累計型：優先抓有填值(>0)的最新一天，避免當天空白蓋掉前一天的值
+  const rows = RAW.filter(r => r.name === name && (r[key] || 0) > 0)
+                  .sort((a,b) => b.date.localeCompare(a.date));
   return rows.length ? (rows[0][key] || 0) : 0;
 }
 function getSum(name, key) {

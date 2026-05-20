@@ -123,15 +123,15 @@ const FALLBACK_RAW = [
   {date:'05/01',name:'黃敬凱', order:2, mdt:17, mdc:16, bdt:10, bdc:35, svt_f:4, svt_b:24, svc_f:2, svc_b:12, pay:4000,  pay_cum:4000},
 ];
 const FALLBACK_TARGETS = {
-  '張田裕': { mdt:119, mdc:122, bdt:71,  bdc:182, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '劉自強': { mdt:86,  mdc:100, bdt:23,  bdc:173, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '楊承舜': { mdt:88,  mdc:82,  bdt:74,  bdc:143, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '陳峰毓': { mdt:97,  mdc:60,  bdt:56,  bdc:114, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '林恩霆': { mdt:104, mdc:78,  bdt:70,  bdc:120, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '李靜宜': { mdt:64,  mdc:30,  bdt:42,  bdc:80,  svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '顏廷樨': { mdt:91,  mdc:77,  bdt:62,  bdc:106, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '范振軒': { mdt:119, mdc:57,  bdt:61,  bdc:110, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
-  '黃敬凱': { mdt:84,  mdc:82,  bdt:50,  bdc:146, svt_f:null, svt_b:null, svc_f:null, svc_b:null },
+  '張田裕': { mdt:119, mdc:103, bdt:71,  bdc:162, svt_f:157, svt_b:703,  svc_f:6, svc_b:398  },
+  '劉自強': { mdt:86,  mdc:83,  bdt:23,  bdc:153, svt_f:165, svt_b:739,  svc_f:8, svc_b:972  },
+  '楊承舜': { mdt:88,  mdc:71,  bdt:74,  bdc:131, svt_f:146, svt_b:626,  svc_f:5, svc_b:1286 },
+  '陳峰毓': { mdt:56,  mdc:70,  bdt:97,  bdc:96,  svt_f:162, svt_b:700,  svc_f:3, svc_b:466  },
+  '林恩霆': { mdt:104, mdc:71,  bdt:70,  bdc:107, svt_f:152, svt_b:730,  svc_f:2, svc_b:115  },
+  '李靜宜': { mdt:64,  mdc:55,  bdt:42,  bdc:101, svt_f:127, svt_b:553,  svc_f:2, svc_b:202  },
+  '顏廷樨': { mdt:91,  mdc:23,  bdt:62,  bdc:55,  svt_f:140, svt_b:650,  svc_f:5, svc_b:562  },
+  '范振軒': { mdt:119, mdc:34,  bdt:61,  bdc:94,  svt_f:155, svt_b:709,  svc_f:6, svc_b:413  },
+  '黃敬凱': { mdt:84,  mdc:36,  bdt:50,  bdc:82,  svt_f:128, svt_b:554,  svc_f:4, svc_b:120  },
 };
 
 // ── 指標定義 ──
@@ -140,10 +140,10 @@ const METRICS = [
   { key:'mdc',     label:'中判陳列優化 連鎖', unit:'家', hasTarget:true  },
   { key:'bdt',     label:'大判陳列優化 傳統', unit:'家', hasTarget:true  },
   { key:'bdc',     label:'大判陳列優化 連鎖', unit:'家', hasTarget:true  },
-  { key:'svt_f',   label:'超值包 傳統家數',   unit:'家', hasTarget:false },
-  { key:'svt_b',   label:'超值包 傳統盒數',   unit:'盒', hasTarget:false },
-  { key:'svc_f',   label:'超值包 連鎖家數',   unit:'家', hasTarget:false },
-  { key:'svc_b',   label:'超值包 連鎖盒數',   unit:'盒', hasTarget:false },
+  { key:'svt_f',   label:'超值包 傳統家數',   unit:'家', hasTarget:true  },
+  { key:'svt_b',   label:'超值包 傳統盒數',   unit:'盒', hasTarget:true  },
+  { key:'svc_f',   label:'超值包 連鎖家數',   unit:'家', hasTarget:true  },
+  { key:'svc_b',   label:'超值包 連鎖盒數',   unit:'盒', hasTarget:true  },
   { key:'order',   label:'訂單數',            unit:'單', hasTarget:false },
   { key:'pay',     label:'今日收款金額',       unit:'元', hasTarget:false },
   { key:'pay_cum', label:'累計收款金額',       unit:'元', hasTarget:false },
@@ -225,10 +225,12 @@ function renderSummary() {
     NAMES.forEach(n => { tv += getLatest(n,m.key); const t=getTarget(n,m.key); if(t) tt+=t; });
     const pct   = tt > 0 ? Math.round(tv/tt*100) : 0;
     const above = NAMES.filter(n => { const v=getLatest(n,m.key),t=getTarget(n,m.key); return t&&v>=t; }).length;
+    const avg = NAMES.length > 0 ? Math.round(tv / NAMES.length) : 0;
+    const avgTgt = tt > 0 ? Math.round(tt / NAMES.length) : 0;
     html = `
       <div class="scard teal"><div class="scard-label">整體達成率</div><div class="scard-val">${pct}%</div><div class="scard-sub">${m.label}</div></div>
       <div class="scard blue"><div class="scard-label">已達標人數</div><div class="scard-val">${above}<span style="font-size:16px;color:var(--text3)"> / ${NAMES.length}</span></div><div class="scard-sub">人達目標</div></div>
-      <div class="scard amber"><div class="scard-label">最新資料日期</div><div class="scard-val" style="font-size:20px">${latestDate}</div><div class="scard-sub">本月累計</div></div>`;
+      <div class="scard amber"><div class="scard-label">人均累計</div><div class="scard-val">${avg}</div><div class="scard-sub">目標人均 ${avgTgt} ${m.unit}</div></div>`;
 
   } else if (m.key === 'order') {
     const total = NAMES.reduce((a,n) => a+getSum(n,'order'), 0);
@@ -250,14 +252,15 @@ function renderSummary() {
       <div class="scard amber"><div class="scard-label">有收款人數</div><div class="scard-val">${NAMES.filter(n=>fn(n)>0).length}</div><div class="scard-sub">人</div></div>`;
 
   } else {
-    // 超值包等無目標累計指標
+    // 無目標累計指標（order/pay 已在上方處理）
     const total = NAMES.reduce((a,n) => a+getLatest(n,m.key), 0);
     const max   = Math.max(...NAMES.map(n => getLatest(n,m.key)));
     const top   = NAMES.find(n => getLatest(n,m.key) === max) || '—';
+    const avg2  = NAMES.length > 0 ? Math.round(total / NAMES.length) : 0;
     html = `
       <div class="scard teal"><div class="scard-label">全隊累計</div><div class="scard-val">${total}</div><div class="scard-sub">${m.unit}（本月）</div></div>
       <div class="scard blue"><div class="scard-label">最多累計</div><div class="scard-val">${max}</div><div class="scard-sub">${top}</div></div>
-      <div class="scard amber"><div class="scard-label">最新資料日期</div><div class="scard-val" style="font-size:20px">${latestDate}</div><div class="scard-sub">本月累計</div></div>`;
+      <div class="scard amber"><div class="scard-label">人均累計</div><div class="scard-val">${avg2}</div><div class="scard-sub">${m.unit} / 人</div></div>`;
   }
   document.getElementById('summaryCards').innerHTML = html;
 }
@@ -355,4 +358,3 @@ loadData();
 </script>
 </body>
 </html>
-
